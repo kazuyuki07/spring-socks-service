@@ -1,0 +1,35 @@
+services:
+  socks-service:
+    image: socks_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DB_URI: jdbc:postgresql://socks-database:5432/socks_service
+      DB_USERNAME: postgres
+      DB_PASSWORD: root
+      WAREHOUSE_HISTORY_URL: warehouse-history-service:3080/api/warehouse_history
+    depends_on:
+      - socks-database
+    networks:
+      - socksnet
+      - socks-db-net
+
+  socks-database:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: socks_service
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - socks-db-net
+
+networks:
+  socksnet:
+    external: true
+  socks-db-net:
+    driver: bridge
