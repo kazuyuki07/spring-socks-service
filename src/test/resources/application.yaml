@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:latest:///socks_test
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog.yaml
+    enabled: true
+    drop-first: false
+    default-schema: public
