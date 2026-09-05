@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import su.yuk1chan.springsocks.client.WarehouseHistoryClient;
 import su.yuk1chan.springsocks.dto.SocksDTO;
 import su.yuk1chan.springsocks.dto.SocksResponse;
+import su.yuk1chan.springsocks.dto.WarehouseHistoryDTO;
 import su.yuk1chan.springsocks.entities.Socks;
 import su.yuk1chan.springsocks.entities.Warehouse;
 import su.yuk1chan.springsocks.repositories.SocksRepository;
@@ -19,6 +22,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SocksControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private WarehouseHistoryClient warehouseHistoryClient;
 
     @Autowired
     private SocksRepository socksRepository;
@@ -55,6 +63,7 @@ public class SocksControllerTest {
         // Успешное добавление носков на склад
         SocksDTO socksDTO = new SocksDTO("red", 30, 150);
 
+        when(warehouseHistoryClient.writeHistory(any())).thenReturn(new WarehouseHistoryDTO());
 
         mockMvc.perform(post("/api/socks/income")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -87,6 +96,7 @@ public class SocksControllerTest {
                     .quantity(100)
                     .build());
 
+        when(warehouseHistoryClient.writeHistory(any())).thenReturn(new WarehouseHistoryDTO());
 
         mockMvc.perform(post("/api/socks/income")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -205,6 +215,7 @@ public class SocksControllerTest {
 
         SocksDTO socksDTOResponse = new SocksDTO(socks.getColor(), socks.getCottonPart(), 150);
 
+        when(warehouseHistoryClient.writeHistory(any())).thenReturn(new WarehouseHistoryDTO());
 
         mockMvc.perform(delete("/api/socks/outcome/{id}", warehouse.getId())
                 .param("quantity", "50"))

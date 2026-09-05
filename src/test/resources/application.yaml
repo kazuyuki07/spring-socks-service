@@ -3,6 +3,10 @@ spring:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:latest:///socks_test
 
+  client:
+    warehouse:
+      url: 127.0.0.1:1000
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog.yaml
     enabled: true
