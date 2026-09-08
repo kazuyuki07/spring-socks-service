@@ -2,7 +2,6 @@ package su.yuk1chan.springsocks.facades;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.*;
 import su.yuk1chan.springsocks.client.WarehouseHistoryClient;
 import su.yuk1chan.springsocks.dto.SocksDTO;
 import su.yuk1chan.springsocks.dto.SocksResponse;

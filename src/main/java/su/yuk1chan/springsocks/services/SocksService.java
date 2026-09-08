@@ -1,6 +1,5 @@
 package su.yuk1chan.springsocks.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import su.yuk1chan.springsocks.dto.SocksResponse;
