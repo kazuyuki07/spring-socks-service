@@ -16,6 +16,11 @@ import java.util.List;
 public class SocksController {
     private final SocksFacade socksFacade;
 
+    @GetMapping("/{socksId}")
+    public SocksDTO getSocksBySocksId(@PathVariable Long socksId) {
+        return socksFacade.getSocksBySocksId(socksId);
+    }
+
     @GetMapping()
     public List<SocksResponse> showMeSocks(
             @RequestParam(required = false) String color,

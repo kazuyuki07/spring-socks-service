@@ -1,6 +1,5 @@
 package su.yuk1chan.springsocks.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import su.yuk1chan.springsocks.dto.SocksResponse;
@@ -18,7 +17,6 @@ import static su.yuk1chan.springsocks.util.Constants.*;
 @RequiredArgsConstructor
 public class SocksService {
     private final SocksRepository socksRepository;
-
 
     public Socks getSocksBySocksId(Long socksId) {
         return socksRepository.findById(socksId)

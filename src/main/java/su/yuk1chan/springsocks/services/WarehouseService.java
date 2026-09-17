@@ -16,6 +16,15 @@ public class WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final SocksRepository socksRepository;
 
+    public Warehouse getWarehouseById(Long id) {
+        return warehouseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Не найден склад id:" + id));
+    }
+
+    public Warehouse getWarehouseBySocksId(Long socksId) {
+        return warehouseRepository.findBySocksId(socksId)
+                .orElseThrow(() -> new NotFoundException("Не найден склад с носками:" + socksId));
+    }
 
     public Warehouse addIntoWarehouse(Long socksId, Integer quantity) {
         if (quantity <= 0) {

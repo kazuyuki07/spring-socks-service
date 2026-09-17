@@ -2,14 +2,10 @@ spring:
   application:
     name: SpringSocks
 
-  client:
-    warehouse:
-      url: ${WAREHOUSE_HISTORY_URL}
-
   datasource:
-    url: ${DB_URI}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_URI:jdbc:postgresql://127.0.0.1:5432/socks_service}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:root}
     driver-class-name: org.postgresql.Driver
 
   liquibase:
