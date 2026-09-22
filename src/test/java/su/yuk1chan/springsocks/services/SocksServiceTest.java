@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import su.yuk1chan.springsocks.dto.SocksResponse;
+import su.yuk1chan.springsocks.dto.SocksResponseWithDate;
 import su.yuk1chan.springsocks.entities.Socks;
 import su.yuk1chan.springsocks.entities.Warehouse;
 import su.yuk1chan.springsocks.exceptions.NotFoundException;
@@ -162,7 +163,7 @@ public class SocksServiceTest{
                 .cottonPart(20)
                 .build()
         );
-        warehouseRepository.save(
+        Warehouse warehouse1 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock1.getId())
                 .quantity(300)
@@ -176,7 +177,7 @@ public class SocksServiceTest{
                 .cottonPart(43)
                 .build()
         );
-        warehouseRepository.save(
+        Warehouse warehouse2 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock2.getId())
                 .quantity(452)
@@ -189,8 +190,8 @@ public class SocksServiceTest{
 
         assertThat(result)
             .isEqualTo(List.of(
-                new SocksResponse(sock1.getId(), "red", 20, 300),
-                new SocksResponse(sock2.getId(), "red", 43, 452)
+                new SocksResponse(sock1.getId(), "red", 20, 300, warehouse1.getId()),
+                new SocksResponse(sock2.getId(), "red", 43, 452, warehouse2.getId())
             )
         );
     }
@@ -206,7 +207,7 @@ public class SocksServiceTest{
                 .cottonPart(31)
                 .build()
         );
-         warehouseRepository.save(
+         Warehouse warehouse1 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock1.getId())
                 .quantity(1300)
@@ -220,7 +221,7 @@ public class SocksServiceTest{
                 .cottonPart(58)
                 .build()
         );
-        warehouseRepository.save(
+        Warehouse warehouse2 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock2.getId())
                 .quantity(374)
@@ -233,8 +234,8 @@ public class SocksServiceTest{
 
         assertThat(result)
             .isEqualTo(List.of(
-                new SocksResponse(sock1.getId(), "orange", 31, 1300),
-                new SocksResponse(sock2.getId(), "orange", 58, 374)
+                new SocksResponse(sock1.getId(), "orange", 31, 1300, warehouse1.getId()),
+                new SocksResponse(sock2.getId(), "orange", 58, 374, warehouse2.getId())
             )
         );
     }
@@ -250,7 +251,7 @@ public class SocksServiceTest{
                 .cottonPart(73)
                 .build()
         );
-         warehouseRepository.save(
+        Warehouse warehouse1 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock1.getId())
                 .quantity(231)
@@ -264,7 +265,7 @@ public class SocksServiceTest{
                 .cottonPart(73)
                 .build()
         );
-        warehouseRepository.save(
+        Warehouse warehouse2 = warehouseRepository.save(
             Warehouse.builder()
                 .socksId(sock2.getId())
                 .quantity(127)
@@ -277,8 +278,8 @@ public class SocksServiceTest{
 
         assertThat(result)
             .isEqualTo(List.of(
-                new SocksResponse(sock1.getId(), "white", 73, 231),
-                new SocksResponse(sock2.getId(), "blue", 73, 127)
+                new SocksResponse(sock1.getId(), "white", 73, 231, warehouse1.getId()),
+                new SocksResponse(sock2.getId(), "blue", 73, 127, warehouse2.getId())
             )
         );
     }

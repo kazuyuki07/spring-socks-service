@@ -66,6 +66,7 @@ public class SocksService {
         }
 
 
+
         return switch (operation) {
             case MORE_THAN_OPERATION -> socksRepository.getSocksMoreThan(color, cottonPart);
             case LESS_THAN_OPERATION -> socksRepository.getSocksLessThan(color, cottonPart);

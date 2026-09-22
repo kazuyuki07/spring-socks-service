@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import su.yuk1chan.springsocks.dto.SocksDTO;
 import su.yuk1chan.springsocks.dto.SocksResponse;
+import su.yuk1chan.springsocks.dto.SocksResponseWithDate;
 import su.yuk1chan.springsocks.entities.Socks;
 import su.yuk1chan.springsocks.entities.Warehouse;
 import su.yuk1chan.springsocks.repositories.SocksRepository;
@@ -320,13 +321,15 @@ public class SocksControllerTest {
                     socks1.getId(),
                     socks1.getColor(),
                     socks1.getCottonPart(),
-                    warehouse1.getQuantity()
+                    warehouse1.getQuantity(),
+                    warehouse1.getId()
                 ),
                 new SocksResponse(
                     socks2.getId(),
                     socks2.getColor(),
                     socks2.getCottonPart(),
-                    warehouse2.getQuantity()
+                    warehouse2.getQuantity(),
+                    warehouse2.getId()
                 )
         );
 
@@ -380,7 +383,8 @@ public class SocksControllerTest {
                         socks2.getId(),
                         socks2.getColor(),
                         socks2.getCottonPart(),
-                        warehouse2.getQuantity()
+                        warehouse2.getQuantity(),
+                        warehouse2.getId()
                 )
         );
 
@@ -421,7 +425,8 @@ public class SocksControllerTest {
                         socks1.getId(),
                         socks1.getColor(),
                         socks1.getCottonPart(),
-                        warehouse1.getQuantity()
+                        warehouse1.getQuantity(),
+                        warehouse1.getId()
                 )
         );
 
@@ -439,7 +444,7 @@ public class SocksControllerTest {
     void showMeSocksMoreThanEmptySuccess() throws Exception {
         /* Показывает пустой список носков
            большей какой-либо процентов состава хлопка */
-        List<SocksResponse> socksResponse = List.of();
+        List<SocksResponseWithDate> socksResponseWithDate = List.of();
 
 
         mockMvc.perform(get("/api/socks")
@@ -447,7 +452,7 @@ public class SocksControllerTest {
                 .param("operation", "moreThan")
                 .param("cotton_part", "12"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(socksResponse)));
+                .andExpect(content().json(objectMapper.writeValueAsString(socksResponseWithDate)));
     }
 
 
@@ -455,7 +460,7 @@ public class SocksControllerTest {
     void showMeSocksLessThanEmptySuccess() throws Exception {
         /* Показывает пустой список носков
            меньшей какой-либо процентов состава хлопка */
-        List<SocksResponse> socksResponse = List.of();
+        List<SocksResponseWithDate> socksResponseWithDate = List.of();
 
 
         mockMvc.perform(get("/api/socks")
@@ -463,7 +468,7 @@ public class SocksControllerTest {
                 .param("operation", "lessThan")
                 .param("cotton_part", "20"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(socksResponse)));
+                .andExpect(content().json(objectMapper.writeValueAsString(socksResponseWithDate)));
     }
 
 
@@ -471,7 +476,7 @@ public class SocksControllerTest {
     void showMeSocksEqualEmptySuccess() throws Exception {
         /* Показывает пустой список носков
            равное какой-либо процентов состава хлопка */
-        List<SocksResponse> socksResponse = List.of();
+        List<SocksResponseWithDate> socksResponseWithDate = List.of();
 
 
         mockMvc.perform(get("/api/socks")
@@ -479,7 +484,7 @@ public class SocksControllerTest {
                 .param("operation", "equal")
                 .param("cotton_part", "93"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(socksResponse)));
+                .andExpect(content().json(objectMapper.writeValueAsString(socksResponseWithDate)));
     }
 
 

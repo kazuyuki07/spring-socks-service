@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import su.yuk1chan.springsocks.dto.SocksDTO;
 import su.yuk1chan.springsocks.dto.SocksResponse;
+import su.yuk1chan.springsocks.dto.SocksResponseWithDate;
 import su.yuk1chan.springsocks.facades.SocksFacade;
 
 import java.util.List;
@@ -15,11 +16,6 @@ import java.util.List;
 @RequestMapping(path = "/api/socks")
 public class SocksController {
     private final SocksFacade socksFacade;
-
-    @GetMapping("/{socksId}")
-    public SocksDTO getSocksBySocksId(@PathVariable Long socksId) {
-        return socksFacade.getSocksBySocksId(socksId);
-    }
 
     @GetMapping()
     public List<SocksResponse> showMeSocks(
@@ -32,13 +28,13 @@ public class SocksController {
 
     @PostMapping("/income")
     @ResponseStatus(HttpStatus.CREATED)
-    public SocksDTO income(@RequestBody SocksDTO incomeDTO) {
+    public SocksResponseWithDate income(@RequestBody SocksDTO incomeDTO) {
         return socksFacade.income(incomeDTO);
     }
 
 
     @DeleteMapping("/outcome/{warehouseId}")
-    public SocksDTO outcome(@PathVariable Long warehouseId, @RequestParam Integer quantity){
+    public SocksResponseWithDate outcome(@PathVariable Long warehouseId, @RequestParam Integer quantity){
         return socksFacade.outcome(warehouseId, quantity);
     }
 
