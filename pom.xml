@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>su.yuk1chan</groupId>
-    <artifactId>SpringSocks</artifactId>
+    <artifactId>spring-socks</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SpringSocks</name>
-    <description>SpringSocks</description>
+    <name>spring-socks</name>
+    <description>spring-socks</description>
     <url/>
     <licenses>
         <license/>
