@@ -1,77 +1,55 @@
 package su.yuk1chan.springsocks.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import su.yuk1chan.springsocks.dto.SocksResponse;
-import su.yuk1chan.springsocks.entities.Socks;
+import su.yuk1chan.springsocks.dto.PagedResponse;
+import su.yuk1chan.springsocks.dto.SocksDTO;
+import su.yuk1chan.springsocks.entity.Socks;
+import su.yuk1chan.springsocks.enums.SocksSort;
 import su.yuk1chan.springsocks.exceptions.NotFoundException;
-import su.yuk1chan.springsocks.exceptions.ValidationException;
-import su.yuk1chan.springsocks.repositories.SocksRepository;
+import su.yuk1chan.springsocks.mapper.SocksMapper;
+import su.yuk1chan.springsocks.repository.SocksRepository;
+import su.yuk1chan.springsocks.repository.specification.SocksSpecification;
 
-import java.util.List;
-import java.util.Optional;
-
-import static su.yuk1chan.springsocks.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor
 public class SocksService {
     private final SocksRepository socksRepository;
+    private final SocksMapper socksMapper;
 
-    public Socks getSocksBySocksId(Long socksId) {
-        return socksRepository.findById(socksId)
-                .orElseThrow(() -> new NotFoundException("Носки не найдены id:" + socksId));
+    public PagedResponse<SocksDTO> getSocks(
+            Integer page,
+            Integer size,
+            String color,
+            String sort) {
+        Specification<Socks> socksSpecification = Specification.where(SocksSpecification.colorFilter(color));
+
+        SocksSort socksSort = SocksSort.of(sort);
+        Sort sorted = Sort.by(
+                socksSort.getDirection(),
+                socksSort.getEntityValue()
+        );
+
+        Page<Socks> socks = socksRepository.findAll(socksSpecification, PageRequest.of(page, size, sorted));
+
+        return PagedResponse.from(socks.map(socksMapper::socksToSocksDTO));
     }
 
-
-    public Socks addSocks(String color, Integer cottonPart) {
-        if (!color.matches("[a-zA-z]+")) {
-            throw new IllegalArgumentException("Неверный параметр: " + color);
-        }
-
-
-        if (cottonPart > 100 || cottonPart < 0) {
-            throw new ValidationException("Неверный параметр: " + cottonPart);
-        }
-
-
-        Optional<Socks> socksOpt = socksRepository.findByColorAndCottonPart(color, cottonPart);
-
-
-        if (socksOpt.isPresent()) {
-            return socksOpt.get();
-        }
-
-
-        Socks socks = Socks.builder()
-                .color(color)
-                .cottonPart(cottonPart)
-                .build();
-        return socksRepository.save(socks);
+    public Socks addSocks(SocksDTO socksDTO) {
+        return socksRepository.save(socksMapper.socksDTOtoSocks(socksDTO));
     }
 
 
     public void deleteSocks(Long id) {
-        if (!socksRepository.existsById(id)) {
-            throw new NotFoundException("Такие носки не существуют с id: " + id);
-        }
+        Socks foundSocks = socksRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Носки id: " + id + " не найдены")
+        );
 
-        socksRepository.deleteById(id);
-    }
-
-
-    public List<SocksResponse> getSocks(String color, String operation, Integer cottonPart) {
-        if (cottonPart > 100 || cottonPart < 0) {
-            throw new ValidationException("Неверный параметр: " + cottonPart);
-        }
-
-
-
-        return switch (operation) {
-            case MORE_THAN_OPERATION -> socksRepository.getSocksMoreThan(color, cottonPart);
-            case LESS_THAN_OPERATION -> socksRepository.getSocksLessThan(color, cottonPart);
-            case EQUAL_OPERATION -> socksRepository.getSocksEqual(color, cottonPart);
-            default -> throw new IllegalArgumentException("Неизвестная операция: " + operation);
-        };
+        socksRepository.delete(foundSocks);
     }
 }

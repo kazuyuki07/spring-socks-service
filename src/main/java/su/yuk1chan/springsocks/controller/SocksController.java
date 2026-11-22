@@ -1,47 +1,38 @@
 package su.yuk1chan.springsocks.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import su.yuk1chan.springsocks.dto.PagedResponse;
 import su.yuk1chan.springsocks.dto.SocksDTO;
-import su.yuk1chan.springsocks.dto.SocksResponse;
-import su.yuk1chan.springsocks.dto.SocksResponseWithDate;
-import su.yuk1chan.springsocks.facades.SocksFacade;
-
-import java.util.List;
+import su.yuk1chan.springsocks.mapper.SocksMapper;
+import su.yuk1chan.springsocks.services.SocksService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/socks")
 public class SocksController {
-    private final SocksFacade socksFacade;
+    private final SocksService socksService;
+    private final SocksMapper socksMapper;
 
-    @GetMapping()
-    public List<SocksResponse> showMeSocks(
+    @GetMapping
+    public PagedResponse<SocksDTO> getSocks(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) String color,
-            @RequestParam String operation,
-            @RequestParam("cotton_part") Integer cottonPart) {
-        return socksFacade.showMeSocks(color, operation, cottonPart);
+            @RequestParam(required = false) String sort) {
+        return socksService.getSocks(page, size, color, sort);
     }
 
-
-    @PostMapping("/income")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SocksResponseWithDate income(@RequestBody SocksDTO incomeDTO) {
-        return socksFacade.income(incomeDTO);
+    public SocksDTO addSocks(@RequestBody SocksDTO socksDTO) {
+        return socksMapper.socksToSocksDTO(socksService.addSocks(socksDTO));
     }
 
-
-    @DeleteMapping("/outcome/{warehouseId}")
-    public SocksResponseWithDate outcome(@PathVariable Long warehouseId, @RequestParam Integer quantity){
-        return socksFacade.outcome(warehouseId, quantity);
-    }
-
-
-    @DeleteMapping("/delete_socks/{socksId}")
+    @DeleteMapping("/{socksId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSocks(@PathVariable Long socksId) {
-        socksFacade.deleteSocks(socksId);
+        socksService.deleteSocks(socksId);
     }
 }

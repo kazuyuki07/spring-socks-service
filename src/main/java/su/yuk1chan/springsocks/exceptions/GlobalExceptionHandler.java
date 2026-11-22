@@ -18,20 +18,17 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(nfe.getMessage());
     }
 
-
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(ValidationException ve) {
         return new ErrorResponse(ve.getMessage());
     }
 
-
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse illegalArgumentException(IllegalArgumentException iae) {
         return new ErrorResponse(iae.getMessage());
     }
-
 
     @ExceptionHandler(SQLException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
